@@ -1,24 +1,19 @@
 public class RequestBookingService {
 
-  private final InventoryService inventoryService;
-  private final TicketingService ticketingService;
+
+  private final WorkflowService workflowService;
 
   //route POST pour booker
-
-  public RequestBookingService(InventoryService inventoryService, TicketingService ticketingService) {
-    this.inventoryService = inventoryService;
-    this.ticketingService = ticketingService;
+  public RequestBookingService(WorkflowService workflowService) {
+    this.workflowService = workflowService;
   }
 
-  public boolean book(int numberOfSeats) {
-    if(inventoryService.decrementCapacity(numberOfSeats)) {
-      doBooking();
-      ticketingService.printTicket(numberOfSeats);
-    }
-    return inventoryService.decrementCapacity(numberOfSeats);
+  public void book(int numberOfSeats) {
+    requestBooking();
+    workflowService.run(numberOfSeats);
   }
 
-  private void doBooking() {
+  private void requestBooking() {
     System.out.println("booking requested");
   }
 }
