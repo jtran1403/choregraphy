@@ -1,16 +1,15 @@
 public class RequestBookingService {
 
-
-  private final WorkflowService workflowService;
+  private final MessageBus messageBus;
 
   //route POST pour booker
-  public RequestBookingService(WorkflowService workflowService) {
-    this.workflowService = workflowService;
+  public RequestBookingService(MessageBus messageBus) {
+    this.messageBus = messageBus;
   }
 
   public void book(int numberOfSeats) {
     requestBooking();
-    workflowService.run(numberOfSeats);
+    messageBus.send(new Event("BookingRequested", numberOfSeats));
   }
 
   private void requestBooking() {

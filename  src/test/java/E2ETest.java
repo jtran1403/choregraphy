@@ -7,17 +7,16 @@ class E2ETest {
 
   private InventoryService inventoryService;
   private TicketingService ticketingService;
-  private WorkflowService workflowService;
   private RequestBookingService requestBookingService;
   private NotificationService notificationService;
 
   @BeforeEach
   void setUp() {
-    inventoryService = new InventoryService(5);
-    ticketingService = new TicketingService();
-    notificationService = new NotificationService();
-    workflowService = new WorkflowService(inventoryService, ticketingService, notificationService);
-    requestBookingService = new RequestBookingService(workflowService);
+    final MessageBus messageBus = new MessageBus();
+    inventoryService = new InventoryService(5, messageBus);
+    ticketingService = new TicketingService(messageBus);
+    notificationService = new NotificationService(messageBus);
+    requestBookingService = new RequestBookingService(messageBus);
   }
 
   @Test
@@ -26,6 +25,7 @@ class E2ETest {
 
     assertEquals(inventoryService.capacity, 2);
   }
+
   @Test
   public void KO() {
     requestBookingService.book(6);
